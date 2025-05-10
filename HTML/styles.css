@@ -1,0 +1,36 @@
+body {
+  background-color: lightgray;
+}
+
+/* rgb(22, 88, 22) */
+
+/* etiquetas */
+h1 {
+  color: blue;
+}
+article {
+  padding: calc(10px + 5%);
+}
+
+article p {
+  font-weight: bold;
+}
+
+/* id */
+#art1 {
+  color: blue;
+}
+
+#art2 {
+  color: green;
+}
+
+/* class */
+.bg-red {
+  background-color: red;
+  font-family: "Verdana";
+}
+
+.text-green {
+  color: green !important;
+}
