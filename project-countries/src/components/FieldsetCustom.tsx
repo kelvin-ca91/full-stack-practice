@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './FieldsetCustom.css';
+import { Button } from '@/components/ui/button';
+
 const FieldsetCustom = () => {
   // const countries = ['Peru', 'Brazil', 'Argentina', 'Colombia', 'Chiles'];
 
@@ -13,7 +15,7 @@ const FieldsetCustom = () => {
   };
 
   return (
-    <fieldset className="fieldset-border">
+    <fieldset className="border-2 border-blue-500 p-4">
       <legend>List Countries</legend>
       <ul>
         {countries.map((country) => {
@@ -21,11 +23,11 @@ const FieldsetCustom = () => {
         })}
       </ul>
       <input
-        type="text"
+        type="date"
         placeholder="Add a country"
         onChange={(event) => setNewCountry(event.target.value)}
       />
-      <button onClick={addCountry}>Add Country</button>
+      <Button onClick={addCountry}>Add Country</Button>
     </fieldset>
   );
 };
