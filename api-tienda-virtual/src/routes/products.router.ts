@@ -1,9 +1,10 @@
 import { Router } from "express";
+import productsController from "../controllers/products.controller";
 
 const listProducts = [
-  { id: 1, name: 'Product A', price: 100 },
-  { id: 2, name: 'Product B', price: 200 },
-  { id: 3, name: 'Product C', price: 300 }
+  { id: 11, name: 'Product A', price: 100, categoria: 1 },
+  { id: 222, name: 'Product B', price: 200, categoria: 2 },
+  { id: 33, name: 'Product C', price: 300, categoria: 1 },
 ];
 
 class ProductsRouter{
@@ -16,26 +17,60 @@ class ProductsRouter{
 
   private loadRoutes() {
 
+    // /producto?dato=valor&dato2=valor2 ==> request.query
+    // /producto/{dato} ==> request.params
+
+    // Listado de productos
     this.router.get('/', (request, response) => {
-      response.json(listProducts);
+      const orden = String(request.query.orden) || 'asc';
+      const categoria = Number(request.query.categoria);
+
+      const listProductsFinal = productsController.listarProdutos(categoria, orden)
+
+      response.json(listProductsFinal);
     });
 
-    // detail/1    ---- detail?id=1&name=ProductA
+    // Detalle de un producto
     this.router.get('/detail/:idProduct', (req, res) => {
-      console.log(req.params.idProduct)
-      console.log(req.query.name)
+      const idProd = req.params.idProduct;
+      const productFound = listProducts.find(item => item.id === parseInt(idProd));
+      if (productFound) {
+        res.json(productFound);
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
     })
 
+    // Crear producto
     this.router.post('/', (request, response) => {
+      const nombre = request.body.nombre;
+      const precio = request.body.precio;
+      listProducts.push({ id: listProducts.length + 1, name: nombre, price: precio, categoria: 1 });
       response.json({ message: 'Product created' });
     });
 
-    this.router.put('/', (request, response) => {
-      response.json({ message: 'Product updated' });
+    // Actualizar producto
+    this.router.put('/:idProduct', (request, response) => {
+      const precio = request.body.precio;
+      const idProd = request.params.idProduct;
+      const index = listProducts.findIndex(item => item.id === parseInt(idProd));
+      if (index === -1) {
+        response.status(404).json({ message: 'Product not found' });
+      } else {
+        listProducts[index].price = precio
+        response.json({ message: 'Product updated' });
+      }
     })
 
-    this.router.delete('/', (request, response) => {
-      response.json({ message: 'Product deleted' });
+    this.router.delete('/:idProduct', (request, response) => {
+      const idProd = request.params.idProduct;
+      const index = listProducts.findIndex(item => item.id === parseInt(idProd));
+      if (index === -1) {
+        response.status(404).json({ message: 'Product not found' });
+      } else {
+        listProducts.splice(index, 1); // Eliminar el producto del array
+        response.json({ message: 'Product deleted' });
+      }
     })
   }
 }

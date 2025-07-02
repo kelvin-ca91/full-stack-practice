@@ -7,9 +7,10 @@ class App {
 
   constructor() {
     this.app = express();
+    this.app.use(express.json()); // Middleware to parse JSON bodies
     this.environments();
     this.database();
-    this.routes()
+    this.routes();
   }
 
   private environments() {
